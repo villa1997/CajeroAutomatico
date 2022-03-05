@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -33,7 +34,7 @@ public class Transacciones extends AppCompatActivity {
         AdminBd adminBD = new AdminBd(this, "BaseData", null, 1);
         SQLiteDatabase sqLiteDatabase = adminBD.getWritableDatabase();
         String tipoTransaccion = "";
-        if (etMonto.getText().toString() != "") {
+        if (!TextUtils.isEmpty(etMonto.getText().toString())) {
             if (rbRetirar.isChecked()) {
                 tipoTransaccion = "Retirar";
                 if (Float.parseFloat(etMonto.getText().toString()) > saldoActual) {
@@ -55,6 +56,11 @@ public class Transacciones extends AppCompatActivity {
             Toast.makeText(this, "Transaccion realizada correctamente", Toast.LENGTH_SHORT).show();
             LimpiarCampos();
             ConsultaDatos(null);
+        }
+        else
+        {
+            Toast.makeText(this, "El monto es obligatorio", Toast.LENGTH_SHORT).show();
+            return;
         }
     }
 

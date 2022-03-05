@@ -36,14 +36,16 @@ public class MainActivity extends AppCompatActivity {
         }
         else
         {
-
-            Intent intent = new Intent(this, Transacciones.class);
-            startActivity(intent);
-            Limpiar();
-            Toast.makeText(this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show();
-
-
-
+            if(ConsultaUsuario(null))
+            {
+                Intent intent = new Intent(this, Transacciones.class);
+                startActivity(intent);
+                Limpiar();
+                Toast.makeText(this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show();
+            }else
+            {
+                Toast.makeText(this, "el usuario o la contraseña son incorrectos", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -54,9 +56,24 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    //event clear all elements
     private void Limpiar()
     {
         userName.setText("");
         passwordUser.setText("");
+    }
+
+    // event clear search user in database
+    public boolean ConsultaUsuario(View view) {
+        AdminBd adminBD = new AdminBd(this, "BaseData", null, 1);
+        SQLiteDatabase sqLiteDatabase = adminBD.getWritableDatabase();
+        Cursor fila = sqLiteDatabase.rawQuery("select * from Usuarios where Usuario = '"+userName.getText().toString()+"' and Password = '"+passwordUser.getText().toString()+"' limit 1", null);
+
+        if (fila.moveToFirst()) {
+            return true;
+        }else
+        {
+            return false;
+        }
     }
 }
